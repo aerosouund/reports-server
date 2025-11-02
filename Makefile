@@ -68,7 +68,7 @@ clean-tools: ## Remove installed tools
 
 CGO_ENABLED    ?= 0
 LOCAL_PLATFORM := linux/$(GOARCH)
-KO_REGISTRY    := ko.local
+KO_REGISTRY    := docker.io/library
 KO_CACHE       ?= /tmp/ko-cache
 BIN            := reports-server
 ifdef VERSION
@@ -230,7 +230,7 @@ kind-install-etcd: $(HELM) kind-load ## Build image, load it in kind cluster and
 		--set postgresql.enabled=false \
 		--set image.repository=$(PACKAGE) \
 		--set image.tag=$(GIT_SHA)
- 
+
 .PHONY: kind-apply
 kind-apply: $(HELM) kind-load ## Build image, load it in kind cluster and deploy helm chart
 	@echo Install chart... >&2
@@ -259,7 +259,7 @@ kind-apply-api-services: $(HELM) kind-load ## Build image, load it in kind clust
 			| kubectl apply -f -
 
 .PHONY: install-pss-policies
-install-pss-policies: $(HELM) 
+install-pss-policies: $(HELM)
 	@echo Install pss policies... >&2
 	@$(HELM) repo add kyverno https://kyverno.github.io/kyverno/
 	@$(HELM) upgrade --install kyverno-policies kyverno/kyverno-policies \
